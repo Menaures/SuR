@@ -10,7 +10,8 @@ import toolbox_sr1 as sr1
 #   Input Parameter: state x, control input u; both are column vectors
 #   Output Parameter: output y; is a column vector
 #
-# AUTHOR: Joerg Fischer, Lukas Klar
+# AUTHOR
+# Joerg Fischer, Lukas Klar
 # Systems control and optimization laboratory, 
 # Department of Microsystems Engineering (IMTEK),
 # University of Freiburg
@@ -112,24 +113,15 @@ U = 0.05*np.sin(np.linspace(0, 4*np.pi, numSteps))
 
 ###############  7.  Plotting output and Legend and labels
 
-plt.figure()
-
-plt.plot(T,  Y, 'g:', label='$Y_{nonlin}$')
-plt.legend(loc='upper center', shadow=True, fontsize='x-large')
-plt.title('Ausgangssignal des gesteuerten Traktors')
+fig, ax1 = plt.subplots()
+ax1.plot(T, X[:,0], 'b--',  label = "Zustand X")
+ax1.plot(T, X[:,1], 'r--',  label = "Zustand Y")
+ax1.set_ylabel("Ort in m")
+ax1.legend(loc='upper center', shadow=True, fontsize='x-large')
+ax2 = ax1.twinx()
+ax2.plot(T, X[:,2], 'g--', label = "Zustand $\ beta$")
+plt.title('Zustände des Systems')
 plt.xlabel('Zeit in s')
-plt.ylabel('Ort in m')
-
+ax2.set_ylabel('Winkel in radiant', color = "green")
+ax2.tick_params(axis='y', labelcolor= "green")
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-    
