@@ -40,14 +40,15 @@ Output Parameter:
    - state at the end of time interval
       <ROW vector of type numpy array> or scalar
 """
+
+
 def rk(my_ode, delta_t, x, u):
+    k1 = my_ode(x, u)
+    k2 = my_ode(x + delta_t * k1 / 2., u)
+    k3 = my_ode(x + delta_t * k2 / 2., u)
+    k4 = my_ode(x + delta_t * k3, u)
 
-   k1 = my_ode(x, u)
-   k2 = my_ode(x + delta_t * k1 / 2. , u)
-   k3 = my_ode(x + delta_t * k2 / 2. , u)
-   k4 = my_ode(x + delta_t * k3, u)
-
-   return (x + delta_t * (k1 + 2 * k2 + 2* k3 + k4) / 6.)
+    return (x + delta_t * (k1 + 2 * k2 + 2 * k3 + k4) / 6.)
 
 
 # Nonlinear simulator
@@ -97,27 +98,26 @@ Output Parameter:
    - T: Time line that corresponds to X and Y
 """
 
+
 def nlsim(my_ode, x_0, U, delta_t, my_outFunc):
+    # init state, state trajectory, and output trajectory
+    x = x_0
+    X = [x_0]
+    Y = [my_outFunc(x_0, U[0:, ])]
 
-   # init state, state trajectory, and output trajectory
-   x = x_0
-   X = [x_0]
-   Y = [my_outFunc(x_0, U[0:,])] 
+    # forward simulation of ODE with given control sequence
+    for u in U:
+        # calculate state at end of time delta_t using Runge-Kutta integrator
+        x = rk(my_ode, delta_t, x, u)
 
-   # forward simulation of ODE with given control sequence
-   for u in U:
+        # append state to state trajectory
+        X.append(x)
 
-      # calculate state at end of time delta_t using Runge-Kutta integrator
-      x = rk(my_ode, delta_t, x, u)
+        # append output value to output trajectory
+        Y.append(my_outFunc(x, u))
 
-      # append state to state trajectory
-      X.append(x)
+    # create array with used time line for convenient plotting afterwards
+    T = np.linspace(0, delta_t * U.shape[0], U.shape[0] + 1)
 
-      # append output value to output trajectory
-      Y.append(my_outFunc(x, u))
-
-   # create array with used time line for convenient plotting afterwards
-   T = np.linspace(0, delta_t * U.shape[0], U.shape[0] + 1)
-
-   # Before returning, convert X and Y from lists to arrays
-   return(np.array(X), np.array(Y), T)
+    # Before returning, convert X and Y from lists to arrays
+    return (np.array(X), np.array(Y), T)
