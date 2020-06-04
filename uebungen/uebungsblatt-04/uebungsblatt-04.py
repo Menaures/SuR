@@ -24,21 +24,13 @@ def f(x, u):
     C = 1e-3  # [F]
 
     # ODE
-    xdot = -1/(R_2*C)*x[0] -1/(R_1*C)*u
+    xdot = -1/(R_2*C)*x -1/(R_1*C)*u
 
     return xdot
 
 
 def y(x, u):
-    # parameters
-    R_1 = 100  # [Ohm]
-    R_2 = 900  # [Ohm]
-    C = 1e-3  # [F]
-
-    # ODE
-    y = x_0 - integrate.quad((u/R_1 + x[0]/R_2), 0, delta_t)[0]/C
-
-    return y
+    return x
 
 
 # simulation parameters
@@ -47,7 +39,7 @@ delta_t = 0.0005  # [s]
 num_steps = int(T_f / delta_t)
 
 # input control
-U = [1]
+U = np.linspace(1, 1, num_steps)
 
 # initial conditions
 x_0 = 0
@@ -59,6 +51,8 @@ x_0 = 0
 plt.figure(1)
 plt.plot(T, Y)
 plt.step(T[: -1], U, color='red')
-plt.title('Integrator linear simulation')
+plt.title('Integrator non-linear simulation')
 plt.xlabel('t [s]')
-plt.ylabel('Spannung [V]')
+plt.ylabel('Voltage [V]')
+plt.legend(["$v_A(t)$", "$v_E(t)$"])
+plt.savefig("plot.png")
