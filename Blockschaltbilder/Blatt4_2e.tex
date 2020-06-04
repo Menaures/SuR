@@ -1,0 +1,23 @@
+\begin{tikzpicture}
+
+
+% <coordinates>
+\coordinate (Proportionalglied--coord) at (2.5, 0);
+\coordinate (Summierglied--coord) at (5.5, 0);
+\coordinate (Integrierglied--coord) at (8.5, 0);
+% </coordinates>
+
+
+% <blocks>
+\PGlied{Proportionalglied}{Proportionalglied--coord}{1 cm}{}
+\Summationsstelle{Summierglied}{Summierglied--coord}{0.4 cm}
+\IGlied{Integrierglied}{Integrierglied--coord}{1 cm}{}
+% </blocks>
+
+
+% <connections>
+\draw[thick, -latex] (Proportionalglied) -- (Summierglied);
+% </connections>
+
+
+\end{tikzpicture}

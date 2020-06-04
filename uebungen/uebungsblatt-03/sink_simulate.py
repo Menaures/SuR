@@ -1,16 +1,19 @@
 """
-Soruches: tractor.py from Joerg Fischer, Lukas Klar
+Sources: tractor.py from Joerg Fischer, Lukas Klar
 """
 
+import sys
+import SuR.uebungen.toolbox_sr1 as sr1
 import numpy as np
 import matplotlib.pyplot as plt
-import control as ctl
 
-import toolbox_sr1 as sr1
+sys.path.append("D://Uni/SuR")
+
 
 def sink_out(x, u):
     xout = x[0]
     return xout
+
 
 def sink_ode_nl(x, u):
     # Parameter definition
@@ -20,8 +23,10 @@ def sink_ode_nl(x, u):
     Th = 340
     Ta = 300
     # ODE
-    xdot = np.array([-k1 * np.sqrt(x[0]) + u, -k2 * (x[1] - Ta) + (Th-x[1])/x[0] * u],) 
+    xdot = np.array([-k1 * np.sqrt(x[0]) + u,
+                     -k2 * (x[1] - Ta) + (Th - x[1]) / x[0] * u], )
     return xdot
+
 
 def sink_ode_linear(deltax, deltau):
     k1 = 0.6
@@ -31,36 +36,35 @@ def sink_ode_linear(deltax, deltau):
     Ta = 300
     # ODE
     A = np.array([[-0.075, 0], [-0.15, -0.25]])
-    B = np.array([deltau, deltau]) 
+    B = np.array([deltau, deltau])
     return np.matmul(A, deltax) + B
+
 
 stepTime = 0.1
 # number of time steps performed in simulation
 numSteps = 500
 # --> total simulated time is stepTime * numSteps = 50s
 
-###############  4.  Definition of initial state
+# 4.  Definition of initial state
 x_0 = [1, 300]
 
-###############  5.  Definition of control input trajectory
+# 5.  Definition of control input trajectory
 # U is a sequence of control inputs u, where u is a vector if the 
-# system has more than one inpput. The column index of U represents the 
+# system has more than one input. The column index of U represents the
 # time index when a particular u (rows of U) is applied to the system.
 
 U = np.array(np.linspace(2.4, 2.4, numSteps))
 
-###############  6.  Simulation of system
+# 6.  Simulation of system
 # Input Parameter: see steps 1 to 4 above and documentation of nlsim
 # Output Parameter: X, Y are the state and output trajectory, 
-#                  T is the timegrid belonging to X and Y
-
+#                   T is the timegrid belonging to X and Y
 [X1, Y1, T1] = sr1.nlsim(sink_ode_linear, x_0, U, stepTime, sink_out)
-[X, Y, T] = sr1.nlsim(sink_ode_nl, x_0, U, stepTime, sink_out) 
+[X, Y, T] = sr1.nlsim(sink_ode_nl, x_0, U, stepTime, sink_out)
 
-###############  7.  Plotting output and Legend and labels
-
+# 7.  Plotting output and Legend and labels
 fig, ax1 = plt.subplots()
-ax1.plot(T, X[:, 0], 'b--',  label="Zustand $x_1$")
+ax1.plot(T, X[:, 0], 'b--', label="Zustand $x_1$")
 ax1.set_ylabel("Mass $m$ in kg")
 ax1.legend(loc='upper center', shadow=True, fontsize='x-large')
 ax2 = ax1.twinx()

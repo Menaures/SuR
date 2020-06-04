@@ -2,10 +2,13 @@
 
 """
 
+import sys
+import SuR.uebungen.toolbox_sr1 as sr1
 import numpy as np
 import matplotlib.pyplot as plt
-import control as ctl
-import toolbox_sr1
+
+sys.path.append("D://Uni/SuR")
+
 
 # Parameter
 R = 25.0  # [Ohm]

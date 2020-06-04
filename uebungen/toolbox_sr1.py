@@ -57,7 +57,7 @@ Function: nlsim()
    performs a forward simulation of the system that is described by the given
    ODE dx/dt = f(x,u) and given output function y=g(x, u). The simulation 
    starts at t=0 at the given initial state x_0. Then, one simulation step of 
-   length delta_t is performed for each contrtol input in the provided 
+   length delta_t is performed for each control input in the provided 
    control input trajectory U. It is assumed that a control input is constant 
    during the time interval it is applied. 
   
@@ -99,11 +99,11 @@ Output Parameter:
 """
 
 
-def nlsim(my_ode, x_0, U, delta_t, my_outFunc):
+def nlsim(my_ode, x_0, U, delta_t, my_out_func):
     # init state, state trajectory, and output trajectory
     x = x_0
     X = [x_0]
-    Y = [my_outFunc(x_0, U[0:, ])]
+    Y = [my_out_func(x_0, U[0:])]
 
     # forward simulation of ODE with given control sequence
     for u in U:
@@ -114,7 +114,7 @@ def nlsim(my_ode, x_0, U, delta_t, my_outFunc):
         X.append(x)
 
         # append output value to output trajectory
-        Y.append(my_outFunc(x, u))
+        Y.append(my_out_func(x, u))
 
     # create array with used time line for convenient plotting afterwards
     T = np.linspace(0, delta_t * U.shape[0], U.shape[0] + 1)

@@ -1,10 +1,16 @@
+"""
+
+"""
+
+import sys
+import SuR.uebungen.toolbox_sr1 as sr1
 import numpy as np
 import matplotlib.pyplot as plt
-import control as ctl
 
-import toolbox_sr1 as sr1
+sys.path.append("D://Uni/SuR")
 
-#==========================================================================
+
+# ==========================================================================
 # The function defines the ouptut mapping from state to output for the 
 # tractor example
 #   Input Parameter: state x, control input u; both are column vectors
@@ -17,14 +23,16 @@ import toolbox_sr1 as sr1
 # University of Freiburg
 #
 # REMARK: function is called from script "traktor_simulate"
-#==========================================================================
+# ==========================================================================
 # output is the second state (y-position of the tractor)
+
 
 def tractor_out(x, u):
     xout = x[1]
     return xout
 
-#==========================================================================
+
+# ==========================================================================
 # The function defines the ODE of a tractor with the states X(the
 # x-position), Y(the y-position) and beta(the orientation). The input is
 # the steering angle alpha
@@ -39,16 +47,16 @@ def tractor_out(x, u):
 # Systems control and optimization laboratory, 
 # Department of Microsystems Engineering (IMTEK),
 # University of Freiburg
-#==========================================================================
+# ==========================================================================
 
 def tractor_ode_nl(x, u):
     # Parameter definition
-    V = 5; # m/s
-    L = 3; # m
+    V = 5;  # m/s
+    L = 3;  # m
     # ODE
-    xdot = np.array([V * np.cos(x[2]), V * np.sin(x[2]), V / L * np.tan(u)],) #x[2]: beta bzw. Orientierungswinkel
+    xdot = np.array([V * np.cos(x[2]), V * np.sin(x[2]), V / L * np.tan(
+        u)], )  # x[2]: beta bzw. Orientierungswinkel
     return xdot
-
 
 
 # =========================================================================
@@ -77,51 +85,51 @@ def tractor_ode_nl(x, u):
 # In the following, the tractor is simulated for 50 seconds. Starting with 
 # the state [0; 5; 0] and a sinusoidal input.
 
-###############  0.  Closing all open figures
- # close all
+# 0. Closing all open figures
+# close all
 
-###############  1.  Definition of ODE dx/dt = f(x,u)
+# 1. Definition of ODE dx/dt = f(x,u)
 # This is implemented in the function: tractor_ode_nl()
 
-###############  2.  Definition of output function y = g(x,u)
+# 2. Definition of output function y = g(x,u)
 # This is implemented in the function: tractor_out()
-  
-###############  3.  Setting Simulation time parameters
+
+# 3. Setting Simulation time parameters
 # lenght of a single integration step in seconds
 stepTime = 0.1
 # number of time steps performed in simulation
 numSteps = 500
 # --> total simulated time is stepTime * numSteps = 50s
 
-###############  4.  Definition of initial state
+# 4. Definition of initial state
 x_0 = [0, 5, 0]
 
-###############  5.  Definition of control input trajectory
+# 5.  Definition of control input trajectory
 # U is a sequence of control inputs u, where u is a vector if the 
 # system has more than one inpput. The column index of U represents the 
 # time index when a particular u (rows of U) is applied to the system.
 
 # Create a sinusoidal input sequence (2 periods with amplitude 0.05)
-U = 0.05*np.sin(np.linspace(0, 4*np.pi, numSteps))
+U = 0.05 * np.sin(np.linspace(0, 4 * np.pi, numSteps))
 
-###############  6.  Simulation of system
+# 6. Simulation of system
 # Input Parameter: see steps 1 to 4 above and documentation of nlsim
 # Output Parameter: X, Y are the state and output trajectory, 
 #                  T is the timegrid belonging to X and Y
 
 [X, Y, T] = sr1.nlsim(tractor_ode_nl, x_0, U, stepTime, tractor_out)
 
-###############  7.  Plotting output and Legend and labels
+# 7. Plotting output and Legend and labels
 
 fig, ax1 = plt.subplots()
-ax1.plot(T, X[:,0], 'b--',  label = "Zustand X")
-ax1.plot(T, X[:,1], 'r--',  label = "Zustand Y")
+ax1.plot(T, X[:, 0], 'b--', label="Zustand X")
+ax1.plot(T, X[:, 1], 'r--', label="Zustand Y")
 ax1.set_ylabel("Ort in m")
 ax1.legend(loc='upper center', shadow=True, fontsize='x-large')
 ax2 = ax1.twinx()
-ax2.plot(T, X[:,2], 'g--', label = "Zustand $\ beta$")
+ax2.plot(T, X[:, 2], 'g--', label="Zustand $\ beta$")
 plt.title('Zustände des Systems')
 plt.xlabel('Zeit in s')
-ax2.set_ylabel('Winkel in radiant', color = "green")
-ax2.tick_params(axis='y', labelcolor= "green")
+ax2.set_ylabel('Winkel in radiant', color="green")
+ax2.tick_params(axis='y', labelcolor="green")
 plt.show()
