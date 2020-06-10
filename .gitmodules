@@ -1,0 +1,3 @@
+[submodule "Blockschaltbilder_src"]
+	path = Blockschaltbilder_src
+	url = git@github.com:mp4096/blockschaltbilder.git
