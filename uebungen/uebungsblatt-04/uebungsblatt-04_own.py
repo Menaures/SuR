@@ -14,7 +14,7 @@ import numpy as np
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 
-sys.path.append("D://Uni/SuR")
+sys.path.append("..")
 
 
 def f(x, u):

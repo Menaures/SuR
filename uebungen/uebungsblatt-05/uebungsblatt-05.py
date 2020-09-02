@@ -5,7 +5,6 @@ Simulation of PT2 elements
 import sys
 import SuR.uebungen.toolbox_sr1 as sr1
 import numpy as np
-import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 import control as ctl
 
